@@ -1,0 +1,39 @@
+version: 2.1
+
+jobs:      
+  build-image-no-cache:
+    machine: true
+    steps:
+      - checkout
+      - run: docker build . -t dev-image
+      
+  build-no-cache-buildkit:
+    machine: true
+    environment:
+      DOCKER_BUILDKIT: '1'
+    steps:
+      - checkout
+      - run: docker build . -t dev-image
+  
+  build-dlc-buildkit:
+    machine:
+      image: << parameters.image-version >>
+      docker_layer_caching: true
+    parameters:
+      image-version: 
+        type: string
+    environment: 
+      DOCKER_BULDKIT: '1'
+    steps:
+      - checkout
+      - run: df -h
+      - run: docker version
+      - run: docker build . -t dev-image --cache-from=dev-image --build-arg BUILDKIT_INLINE_CACHE=1
+      
+workflows:
+  main:
+    jobs:
+     - build-dlc-buildkit:           
+             matrix:
+               parameters:
+                  image-version: ["ubuntu-2204:2024.05.1"]

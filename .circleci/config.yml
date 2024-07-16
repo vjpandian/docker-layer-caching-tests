@@ -27,8 +27,12 @@ jobs:
     steps:
       - checkout
       - run: df -h
-      - run: curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r '.imageId'
       - run: docker version
+      - run: 
+          name: Fetch AMI ID from Instance Metadata for reference
+          command: |
+             TOKEN=`curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600"` \
+             && curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/ami-id
       - run: docker build . -t dev-image --cache-from=dev-image --build-arg BUILDKIT_INLINE_CACHE=1
       
 workflows:

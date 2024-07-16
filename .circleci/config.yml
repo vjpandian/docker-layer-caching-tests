@@ -15,7 +15,7 @@ jobs:
       - checkout
       - run: docker build . -t dev-image
   
-  build-dlc-buildkit:
+  dlc-test:
     machine:
       image: << parameters.image-version >>
       docker_layer_caching: true
@@ -33,7 +33,7 @@ jobs:
 workflows:
   main:
     jobs:
-     - build-dlc-buildkit:           
+     - dlc-test:           
              matrix:
                parameters:
-                  image-version: ["ubuntu-2204:2024.05.1", "ubuntu-2204:2023.10.1", "ubuntu-2404:2024.05.1", "ubuntu-2004:2024.05.1"]
+                  image-version: ["ubuntu-2204:2024.05.1", "ubuntu-2204:2024.01.1", "ubuntu-2204:2023.10.1", "ubuntu-2404:2024.05.1", "ubuntu-2004:2024.05.1", "ubuntu-2004:2022.04.1", "ubuntu-2004:2024.04.4"]

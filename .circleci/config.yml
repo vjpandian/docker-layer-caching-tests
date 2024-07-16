@@ -36,4 +36,4 @@ workflows:
      - build-dlc-buildkit:           
              matrix:
                parameters:
-                  image-version: ["ubuntu-2204:2024.05.1"]
+                  image-version: ["ubuntu-2204:2024.05.1", "ubuntu-2204:2023.10.1", "ubuntu-2404:2024.05.1", "ubuntu-2004:2024.05.1"]

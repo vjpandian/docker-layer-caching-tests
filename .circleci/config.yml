@@ -41,7 +41,7 @@ workflows:
       - dlc-test:           
              matrix:
                parameters:
-                  image-version: ["ubuntu-2004:2024.05.1", "ubuntu-2004:2022.04.1", "ubuntu-2004:2024.04.4"]
+                  image-version: ["ubuntu-2004:2024.05.1", "ubuntu-2004:2023.10.1", "ubuntu-2004:2024.04.4"]
   ubuntu-2404:
     jobs:
       - dlc-test:           

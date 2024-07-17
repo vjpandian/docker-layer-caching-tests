@@ -30,9 +30,9 @@ jobs:
       - run:
           name: display contents of docker daemon
           command: |
-              [ -f /etc/docker/daemon.json ] && cat /etc/docker/daemon.json || echo "File /etc/docker/daemon.json does not exist"
+              sudo sh -c 'echo -e "{\n  \"features\": {\n    \"buildkit\": true\n  }\n}" > /etc/docker/daemon.json'
+              sudo systemctl restart docker
       - run: docker version
-      - run: systemctl status docker
       - run: 
           name: Fetch AMI ID from Instance Metadata for reference
           command: |

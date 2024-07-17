@@ -5,7 +5,7 @@ jobs:
     machine: true
     steps:
       - checkout
-      - run: docker build . -t dev-image
+      - run: docker build . -t $CIRCLE_WORKFLOW_ID
       
   build-no-cache-buildkit:
     machine: true
@@ -13,7 +13,7 @@ jobs:
       DOCKER_BUILDKIT: '1'
     steps:
       - checkout
-      - run: docker build . -t dev-image
+      - run: docker build . -t $CIRCLE_WORKFLOW_ID
   
   dlc-test:
     machine:
@@ -33,12 +33,23 @@ jobs:
           command: |
              TOKEN=`curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600"` \
              && curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/ami-id
-      - run: docker build . -t dev-image --cache-from=dev-image --build-arg BUILDKIT_INLINE_CACHE=1
+      - run: docker build . -t dev-image --cache-from=<< parameters.image-version >> --build-arg BUILDKIT_INLINE_CACHE=1
       
 workflows:
-  main:
+  ubuntu-2004:
     jobs:
-     - dlc-test:           
+      - dlc-test-2004:           
              matrix:
                parameters:
-                  image-version: ["ubuntu-2204:2024.05.1", "ubuntu-2204:2024.01.1", "ubuntu-2204:2023.10.1", "ubuntu-2404:2024.05.1", "ubuntu-2004:2023.04.2" ,"ubuntu-2004:2024.05.1", "ubuntu-2004:2022.04.1", "ubuntu-2004:2024.04.4"]
+                  image-version: ["ubuntu-2004:2024.05.1", "ubuntu-2004:2022.04.1", "ubuntu-2004:2024.04.4"]
+  ubuntu-2404:
+    jobs:
+      - dlc-test-2404:           
+             matrix:
+               parameters:
+                  image-version: ["ubuntu-2404:2024.05.1"]
+  ubuntu-2204:
+      - dlc-test-2204:           
+             matrix:
+               parameters:
+                  image-version: ["ubuntu-2204:2024.05.1", "ubuntu-2204:2024.01.1", "ubuntu-2204:2023.10.1"] 

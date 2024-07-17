@@ -28,9 +28,15 @@ jobs:
       - checkout
       - run: df -h
       - run:
-          name: display contents of docker daemon
+          name: enable buildkit feature and restart docker
           command: |
-              sudo sh -c 'echo -e "{\n  \"features\": {\n    \"buildkit\": true\n  }\n}" > /etc/docker/daemon.json'
+              sudo tee /etc/docker/daemon.json > /dev/null <<EOF
+              {
+                "features": {
+                    "buildkit": true
+                    }
+              }
+              EOF
               sudo systemctl restart docker
       - run: docker version
       - run: 

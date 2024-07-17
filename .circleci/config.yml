@@ -30,13 +30,13 @@ jobs:
       - run:
           name: enable buildkit feature and restart docker
           command: |
-              sudo tee /etc/docker/daemon.json > /dev/null <<EOF
-              {
-                "features": {
-                    "buildkit": true
+              sudo tee /etc/docker/daemon.json > /dev/null \<<EOF
+                {
+                  "features": {
+                       "buildkit": true
                     }
-              }
-              EOF
+                }
+                EOF
               sudo systemctl restart docker
       - run: docker version
       - run: 

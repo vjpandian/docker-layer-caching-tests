@@ -29,7 +29,8 @@ jobs:
       - run: df -h
       - run:
           name: display contents of docker daemon
-          command: [ -f /etc/docker/daemon.json ] && cat /etc/docker/daemon.json || echo "File /etc/docker/daemon.json does not exist"
+          command: |
+              [ -f /etc/docker/daemon.json ] && cat /etc/docker/daemon.json || echo "File /etc/docker/daemon.json does not exist"
       - run: docker version
       - run: 
           name: Fetch AMI ID from Instance Metadata for reference
